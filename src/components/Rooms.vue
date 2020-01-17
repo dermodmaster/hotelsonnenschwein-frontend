@@ -180,6 +180,50 @@
                                     </v-card>
                                 </v-row>
                             </v-card-text>
+                            <v-card-text v-if="i == 5">
+                                <v-row>
+                                    <v-card v-for="j in 2" :key="j"
+                                            :loading="loading"
+                                            class="mx-auto my-12"
+                                            max-width="374"
+                                    >
+                                        <v-img
+                                                height="250"
+                                                src="../assets/swimmingpool1.jpg"
+                                        ></v-img>
+
+                                        <v-card-title>Schwimmbad #X</v-card-title>
+
+                                        <v-card-text>
+                                            <div class="my-4 subtitle-1 black--text">
+                                                Kapazität: x Personen
+                                            </div>
+
+                                            <div>Beschreibung Beschreibung Beschreibung Beschreibung Beschreibung</div>
+                                        </v-card-text>
+
+                                        <v-divider class="mx-4"></v-divider>
+
+                                        <v-card-title>Bestehende Reservierungen</v-card-title>
+
+                                        <v-card-text>
+                                                <v-chip class="accent mr-2">5:30Uhr - 7:30Uhr</v-chip>
+                                                <v-chip class="accent mr-2">16:30Uhr - 17:30Uhr</v-chip>
+                                        </v-card-text>
+
+                                        <v-card-actions>
+                                            <v-btn
+                                                    color="secondary"
+                                                    @click="reserve"
+                                            >
+                                                Reservieren
+                                            </v-btn>
+                                            <v-spacer></v-spacer>
+                                            <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-row>
+                            </v-card-text>
                         </v-card>
                     </v-tab-item>
                 </v-tabs-items>
