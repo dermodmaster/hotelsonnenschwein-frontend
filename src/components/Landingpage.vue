@@ -2,11 +2,12 @@
   <v-content class="pa-0">
     <v-parallax
             src="../assets/quitandinha-palace.jpg"
+            height="700"
     >
       <v-row
               align="center"
               justify="center"
-              style="background: rgba(0,0,0,0.4);margin-left: -16px; margin-right: -16px"
+              style="background: rgba(0,0,0,0.6);margin-left: -16px; margin-right: -16px"
       >
         <v-col class="text-center" cols="15">
           <img

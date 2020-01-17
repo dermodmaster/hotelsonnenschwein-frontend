@@ -5,35 +5,71 @@
       color="primary"
       dark
     >
-      <div class="d-flex align-center">
+      <router-link
+              to="/"
+              tag="span"
+      >
+      <v-btn class="d-flex align-center text-none" text>
         <h2><v-icon>mdi-hotel</v-icon> Hotel Sonnenschwein</h2>
-      </div>
+      </v-btn>
+      </router-link>
 
       <v-spacer></v-spacer>
-
-      <v-btn
-        target="_blank"
-        text
+      <router-link
+              to="/"
+              tag="span"
       >
-        <span class="mr-2">Einchecken</span>
-        <v-icon>mdi-run</v-icon>
-      </v-btn>
+        <v-btn
+                target="_blank"
+                color="secondary"
+                class="ma-2"
+        >
+          <span class="mr-2">Startseite</span>
+          <v-icon>mdi-home</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link
+              to="/rooms"
+              tag="span"
+      >
+        <v-btn
+                target="_blank"
+                color="secondary"
+                class="ma-2"
+        >
+          <span class="mr-2">Örtlichkeiten</span>
+          <v-icon>mdi-door</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link
+              to="/booking"
+              tag="span"
+      >
+        <v-btn
+                class="ma-2"
+                target="_blank"
+                rounded
+                color="accent"
+        >
+          <span class="mr-2">Einchecken</span>
+          <v-icon>mdi-run</v-icon>
+          <v-icon>mdi-arrow-right-thick</v-icon>
+        </v-btn>
+      </router-link>
     </v-app-bar>
 
     <v-content>
-      <Landingpage/>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Landingpage from './components/Landingpage';
 
 export default {
   name: 'App',
 
   components: {
-    Landingpage,
   },
 
   data: () => ({
