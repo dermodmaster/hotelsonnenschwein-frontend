@@ -25,7 +25,7 @@
                     </v-tab>
 
                     <v-tab href="#tab-3">
-                        Festsääle
+                        Festsäle
                         <v-icon>mdi-party-popper</v-icon>
                     </v-tab>
                     <v-tab href="#tab-4">
@@ -46,7 +46,7 @@
                     >
                         <v-card flat>
                             <v-card-text v-if="i == 1">
-                                <h1>Fenster mit Zimmerbuchung hier einfügen</h1>
+                                <Booking></Booking>
                             </v-card-text>
                             <v-card-text v-if="i == 2">
                                 <v-row>
@@ -160,20 +160,9 @@
 
                                         <v-divider class="mx-4"></v-divider>
 
-                                        <v-card-title>Bestehende Reservierungen</v-card-title>
-
-                                        <v-card-text>
-                                                <v-chip class="accent mr-2">5:30Uhr - 7:30Uhr</v-chip>
-                                                <v-chip class="accent mr-2">16:30Uhr - 17:30Uhr</v-chip>
-                                        </v-card-text>
+                                        <v-card-title><v-icon>mdi-clock</v-icon><span class="ml-3">24h am Tag geöffnet</span></v-card-title>
 
                                         <v-card-actions>
-                                            <v-btn
-                                                    color="secondary"
-                                                    @click="reserve"
-                                            >
-                                                Reservieren
-                                            </v-btn>
                                             <v-spacer></v-spacer>
                                             <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
@@ -204,20 +193,9 @@
 
                                         <v-divider class="mx-4"></v-divider>
 
-                                        <v-card-title>Bestehende Reservierungen</v-card-title>
-
-                                        <v-card-text>
-                                                <v-chip class="accent mr-2">5:30Uhr - 7:30Uhr</v-chip>
-                                                <v-chip class="accent mr-2">16:30Uhr - 17:30Uhr</v-chip>
-                                        </v-card-text>
+                                        <v-card-title><v-icon>mdi-clock</v-icon><span class="ml-3">24h am Tag geöffnet</span></v-card-title>
 
                                         <v-card-actions>
-                                            <v-btn
-                                                    color="secondary"
-                                                    @click="reserve"
-                                            >
-                                                Reservieren
-                                            </v-btn>
                                             <v-spacer></v-spacer>
                                             <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
@@ -234,12 +212,13 @@
 </template>
 
 <script>
+    import Booking from "@/components/Booking";
     export default {
         name: "Rooms",
+        components: {Booking},
         data () {
             return {
                 tab: null,
-                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
             }
         },
     }

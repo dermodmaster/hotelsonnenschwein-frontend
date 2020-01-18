@@ -29,6 +29,45 @@
         </v-btn>
       </router-link>
       <router-link
+              to="/workers"
+              tag="span"
+      >
+        <v-btn
+                target="_blank"
+                color="secondary"
+                class="ma-2"
+        >
+          <span class="mr-2">Mitarbeiter</span>
+          <v-icon>mdi-worker</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link
+              to="/information"
+              tag="span"
+      >
+        <v-btn
+                target="_blank"
+                color="secondary"
+                class="ma-2"
+        >
+          <span class="mr-2">Auskunft</span>
+          <v-icon>mdi-information-outline</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link
+              to="/events"
+              tag="span"
+      >
+        <v-btn
+                target="_blank"
+                color="secondary"
+                class="ma-2"
+        >
+          <span class="mr-2">Events</span>
+          <v-icon>mdi-party-popper</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link
               to="/rooms"
               tag="span"
       >
@@ -42,7 +81,7 @@
         </v-btn>
       </router-link>
       <router-link
-              to="/booking"
+              to="/checkin"
               tag="span"
       >
         <v-btn
