@@ -11,6 +11,9 @@ import VueAxios from 'vue-axios';
 import Booking from "@/components/Booking";
 import Informationdesk from "@/components/Informationdesk";
 import Workers from "@/components/Workers";
+import BookingProcess from "@/components/BookingProcess";
+import CreateCustomer from "@/components/CreateCustomer";
+import RoomList from "@/components/RoomList";
 
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
@@ -21,9 +24,12 @@ const routes = [
   { path: '/information', component: Informationdesk},
   { path: '/workers', component: Workers},
   { path: '/rooms', component: Rooms },
+  { path: '/rooms/:roomtype', component: RoomList},
   { path: '/events', component: Events },
   { path: '/checkin', component: Checkin },
-  { path: '/booking', component: Booking }
+  { path: '/createCustomer', component: CreateCustomer },
+  { path: '/booking', component: Booking },
+  { path: '/booking/:id', component: BookingProcess }
 ]
 
 const router = new VueRouter({

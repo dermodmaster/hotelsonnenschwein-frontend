@@ -50,7 +50,7 @@
                             </v-card-text>
                             <v-card-text v-if="i == 2">
                                 <v-row>
-                                    <v-card v-for="j in 6" :key="j"
+                                    <v-card v-for="j in tagungsräume" :key="j.RAUMNUMMER"
                                             :loading="loading"
                                             class="mx-auto my-12"
                                             max-width="374"
@@ -60,16 +60,21 @@
                                                 src="../assets/tagungsraum.jpg"
                                         ></v-img>
 
-                                        <v-card-title>Tagungsraum #X</v-card-title>
+                                        <v-card-title>Tagungsraum</v-card-title>
 
                                         <v-card-text>
-                                            <div class="my-4 subtitle-1 black--text">
-                                                Kapazität: x Personen
+                                            <p><v-icon>mdi-door</v-icon>RaumNr: <span>{{j.RAUMNUMMER}}</span></p>
+                                            <div class="mb-1 subtitle-1 black--text">
+                                                Fläche: {{j.GROESSE}}m² <v-icon>mdi-tape-measure</v-icon><br>
+                                                Max. {{j.TR_KAPAZITAET}} Personen <v-icon>mdi-account</v-icon>
                                             </div>
 
-                                            <div>Beschreibung Beschreibung Beschreibung Beschreibung Beschreibung</div>
+                                            <div>{{j.BESCHREIBUNG}}</div>
                                         </v-card-text>
 
+                                        <v-divider class="mx-4"></v-divider>
+                                        <span class="subtitle-2">Ausstattung:</span><br>
+                                        {{j.INVENTAR}}
                                         <v-divider class="mx-4"></v-divider>
 
                                         <v-card-title>Bestehende Reservierungen</v-card-title>
@@ -80,12 +85,17 @@
                                         </v-card-text>
 
                                         <v-card-actions>
+                                            <router-link
+                                                    :to="'/booking/'+j.RAUMNUMMER"
+                                                    tag="span"
+                                            >
                                             <v-btn
                                                     color="secondary"
-                                                    @click="reserve"
+                                                    
                                             >
                                                 Reservieren
                                             </v-btn>
+                                            </router-link>
                                             <v-spacer></v-spacer>
                                             <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
@@ -94,7 +104,7 @@
                             </v-card-text>
                             <v-card-text v-if="i == 3">
                                 <v-row>
-                                    <v-card v-for="j in 3" :key="j"
+                                    <v-card v-for="j in festsäle" :key="j.RAUMNUMMER"
                                             :loading="loading"
                                             class="mx-auto my-12"
                                             max-width="374"
@@ -104,16 +114,20 @@
                                                 src="../assets/festsaal.jpg"
                                         ></v-img>
 
-                                        <v-card-title>Festsaal #X</v-card-title>
+                                        <v-card-title>Festsaal</v-card-title>
 
                                         <v-card-text>
-                                            <div class="my-4 subtitle-1 black--text">
-                                                Kapazität: x Personen
+                                            <p><v-icon>mdi-door</v-icon>RaumNr: <span>{{j.RAUMNUMMER}}</span></p>
+                                            <div class="mb-1 subtitle-1 black--text">
+                                                Fläche: {{j.GROESSE}}m² <v-icon>mdi-tape-measure</v-icon>
                                             </div>
 
-                                            <div>Beschreibung Beschreibung Beschreibung Beschreibung Beschreibung</div>
+                                            <div>{{j.BESCHREIBUNG}}</div>
                                         </v-card-text>
 
+                                        <v-divider class="mx-4"></v-divider>
+                                        <span class="subtitle-2">Ausstattung:</span><br>
+                                        {{j.INVENTAR}}
                                         <v-divider class="mx-4"></v-divider>
 
                                         <v-card-title>Bestehende Reservierungen</v-card-title>
@@ -124,12 +138,17 @@
                                         </v-card-text>
 
                                         <v-card-actions>
-                                            <v-btn
-                                                    color="secondary"
-                                                    @click="reserve"
+                                            <router-link
+                                                    :to="'/booking/'+j.RAUMNUMMER"
+                                                    tag="span"
                                             >
-                                                Reservieren
-                                            </v-btn>
+                                                <v-btn
+                                                        color="secondary"
+
+                                                >
+                                                    Reservieren
+                                                </v-btn>
+                                            </router-link>
                                             <v-spacer></v-spacer>
                                             <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
@@ -138,7 +157,7 @@
                             </v-card-text>
                             <v-card-text v-if="i == 4">
                                 <v-row>
-                                    <v-card v-for="j in 2" :key="j"
+                                    <v-card v-for="j in fitnessstudios" :key="j.RAUMNUMMER"
                                             :loading="loading"
                                             class="mx-auto my-12"
                                             max-width="374"
@@ -148,16 +167,20 @@
                                                 src="../assets/gym.jpg"
                                         ></v-img>
 
-                                        <v-card-title>Fitnesstudio #X</v-card-title>
+                                        <v-card-title>Fitnesstudio</v-card-title>
 
                                         <v-card-text>
-                                            <div class="my-4 subtitle-1 black--text">
-                                                Kapazität: x Personen
+                                            <p><v-icon>mdi-door</v-icon>RaumNr: <span>{{j.RAUMNUMMER}}</span></p>
+                                            <div class="mb-1 subtitle-1 black--text">
+                                                Fläche: {{j.GROESSE}}m² <v-icon>mdi-tape-measure</v-icon>
                                             </div>
 
-                                            <div>Beschreibung Beschreibung Beschreibung Beschreibung Beschreibung</div>
+                                            <div>{{j.BESCHREIBUNG}}</div>
                                         </v-card-text>
 
+                                        <v-divider class="mx-4"></v-divider>
+                                        <span class="subtitle-2">Ausstattung:</span><br>
+                                        {{j.INVENTAR}}
                                         <v-divider class="mx-4"></v-divider>
 
                                         <v-card-title><v-icon>mdi-clock</v-icon><span class="ml-3">24h am Tag geöffnet</span></v-card-title>
@@ -171,7 +194,7 @@
                             </v-card-text>
                             <v-card-text v-if="i == 5">
                                 <v-row>
-                                    <v-card v-for="j in 2" :key="j"
+                                    <v-card v-for="j in schwimmbäder" :key="j.RAUMNUMMER"
                                             :loading="loading"
                                             class="mx-auto my-12"
                                             max-width="374"
@@ -181,16 +204,20 @@
                                                 src="../assets/swimmingpool1.jpg"
                                         ></v-img>
 
-                                        <v-card-title>Schwimmbad #X</v-card-title>
+                                        <v-card-title>Schwimmbad</v-card-title>
 
                                         <v-card-text>
-                                            <div class="my-4 subtitle-1 black--text">
-                                                Kapazität: x Personen
+                                            <p><v-icon>mdi-door</v-icon>RaumNr: <span>{{j.RAUMNUMMER}}</span></p>
+                                            <div class="mb-1 subtitle-1 black--text">
+                                                Fläche: {{j.GROESSE}}m² <v-icon>mdi-tape-measure</v-icon>
                                             </div>
 
-                                            <div>Beschreibung Beschreibung Beschreibung Beschreibung Beschreibung</div>
+                                            <div>{{j.BESCHREIBUNG}}</div>
                                         </v-card-text>
 
+                                        <v-divider class="mx-4"></v-divider>
+                                        <span class="subtitle-2">Ausstattung:</span><br>
+                                        {{j.INVENTAR}}
                                         <v-divider class="mx-4"></v-divider>
 
                                         <v-card-title><v-icon>mdi-clock</v-icon><span class="ml-3">24h am Tag geöffnet</span></v-card-title>
@@ -213,14 +240,39 @@
 
 <script>
     import Booking from "@/components/Booking";
+    import axios from 'axios';
     export default {
         name: "Rooms",
         components: {Booking},
-        data () {
+        data: () => {
             return {
                 tab: null,
+                rooms: null,
+                loading: false,
+                tagungsräume: [],
+                festsäle: [],
+                fitnessstudios: [],
+                schwimmbäder: [],
             }
         },
+        mounted () {
+            this.loading = true;
+            axios
+                .get('http://hssapi.y4gn1.de/rooms')
+                .then(response => {
+                    this.rooms = response.data;
+                    if(this.rooms){
+                    this.tagungsräume = this.rooms.filter((v) => v.RAUMTYP === 'tagungsraum');
+                    this.festsäle = this.rooms.filter((v) => v.RAUMTYP === 'festsaal');
+                    this.fitnessstudios = this.rooms.filter((v) => v.RAUMTYP === 'fitnessstudio');
+                    this.schwimmbäder = this.rooms.filter((v) => v.RAUMTYP === 'schwimmbad');
+                    }
+                    this.loading = false;
+                })
+        },
+    methods: {
+    }
+
     }
 </script>
 

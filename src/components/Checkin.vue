@@ -21,10 +21,14 @@
                         </router-link>
                     </v-col>
                 <v-col>
+                    <router-link
+                            to="/createCustomer"
+                            tag="div">
                     <v-card class="pa-10">
                     <v-icon size="100px">mdi-account-star</v-icon>
                     <h3 class="display-2">Ich bin Neukunde</h3>
                     </v-card>
+                    </router-link>
                 </v-col>
             </v-row>
         </div>
