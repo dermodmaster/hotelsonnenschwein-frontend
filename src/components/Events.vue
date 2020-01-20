@@ -21,14 +21,14 @@
         <p v-if="events && events.length === 0" class="display-1">Leider keine Events gefunden! :(</p>
         </div>
         <v-row v-if="!loading && events && events.length !== 0" >
-            <v-col v-for="event in events" :key="event.EVENT_ID">
+            <v-col v-for="event in events" :key="event.ID">
                 <v-card class="pa-5 mx-auto" elevation="7" >
-                    <v-card-title>{{event.EVENT_NAME}}</v-card-title>
-                    <v-card-subtitle>{{event.EVENT_START}} bis {{event.EVENT_ENDE}}</v-card-subtitle>
+                    <v-card-title>{{event.NAME}}</v-card-title>
+                    <v-card-subtitle>{{event.START}} bis {{event.ENDE}}</v-card-subtitle>
                     <v-card-text>
-                    <p>{{event.EVENT_BESCHREIBUNG}}</p>
+                    <p>{{event.BESCHREIBUNG}}</p>
                         <p><v-icon>mdi-near-me</v-icon> Reiseziel: {{event.ZIEL}}</p>
-                        <p><v-icon>mdi-human-handsup</v-icon> Max. {{event.EVENT_KAPAZITAET}} Personen</p>
+                        <p><v-icon>mdi-human-handsup</v-icon> Max. {{event.KAPAZITAET}} Personen</p>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn class="secondary" @click="dialog = true; selectedEvent = event">Jetzt Buchen</v-btn><v-spacer></v-spacer><span class="display-1">{{event.KOSTEN}}€</span>p.P.
@@ -44,7 +44,7 @@
                         <p class="headline">Eventbuchung</p>
                     </v-card-title>
                     <v-card-text>
-                        <p>{{personen > 1 ? personen+' Tickets' : personen+' Ticket'}} für das Event <b>{{selectedEvent.EVENT_NAME}}</b></p>
+                        <p>{{personen > 1 ? personen+' Tickets' : personen+' Ticket'}} für das Event <b>{{selectedEvent.NAME}}</b></p>
                         <v-container>
                             <v-row>
                                 <v-col cols="9">
@@ -96,7 +96,7 @@
             bookEvent(){
                 axios.post('http://hssapi.y4gn1.de/events', {
                     email: this.mail,
-                    event_id: this.selectedEvent.EVENT_ID,
+                    id: this.selectedEvent.ID,
                     count: this.personen
                 })
                     .then(response => {
