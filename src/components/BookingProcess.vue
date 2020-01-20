@@ -9,6 +9,12 @@
                 <h3>Raumnummer {{$route.params.id}}</h3>
             </v-card>
         </div>
+        <v-alert v-if="errtext" type="error">
+            {{errtext}}
+        </v-alert>
+        <v-alert v-if="success" type="success">
+            Raum erfolgreich gebucht!
+        </v-alert>
         <v-row>
             <v-col cols="4">
                     <v-card :loading="loading"
@@ -76,7 +82,7 @@
                                     <p>Buchungsstart: {{picker[0]}} {{time}}</p>
                                     <p>Buchungsende: {{picker[1]}} {{time2}}</p>
                                     <p v-if="room" class="title">Preis: {{price === 0 ? parseFloat(room.CALCPREIS).toFixed(2) : price.toFixed(2)}}€/{{price === 0 ? (room.RAUMTYP === 'zimmer' ? 'Nacht' : 'Stunde') : 'TOTAL'}}</p>
-                                    <v-btn class="mr-4" color="secondary" :disabled="!picker || !time || !time2 || !mail" @click="submit">Reservieren</v-btn>
+                                    <v-btn class="mr-4" color="secondary"  :disabled="!picker || !time || !time2 || !mail" @click="bookRoom">Reservieren</v-btn>
                                 </div>
                             </v-col>
                             <v-col>
@@ -163,7 +169,9 @@
                 time:"00:00",
                 time2:"00:00",
                 price: 0,
-                start: '2019-01-12'
+                start: '2019-01-12',
+                success: null,
+                errtext: null
             }
         },
         mounted() {
@@ -192,6 +200,44 @@
 
         },
         methods: {
+            bookRoom(){
+                this.errtext = null;
+                axios.post('http://hssapi.y4gn1.de/rooms', {
+                    raumnummer: this.$route.params.id,
+                    start: this.picker[0]+" "+this.time,
+                    ende: this.picker[1]+" "+this.time2,
+                    email: this.mail
+                })
+                    .then(response => {
+                        this.success = false;
+                        this.errtext = null;
+                        window.console.log(response.data);
+                        if(response.data[0] && response.data[0].Status) {
+                            switch ((parseInt(response.data[0].Status))) {
+                                case 0:
+                                    this.success = true;
+                                    break;
+                                case 1:
+                                    this.errtext = "Ein Parameter fehlt";
+                                    break;
+                                case 2:
+                                    this.errtext = "E-Mail ist nicht gültig";
+                                    break;
+                                case 3:
+                                    this.errtext = "E-Mail konnte nicht gefunden werden";
+                                    break;
+                                case 4:
+                                    this.errtext = "Der Raum ist nicht verfügbar";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        this.errtext = error.response;
+                    });
+            },
             calcPrice(){
                 if(this.picker && this.time && this.time2 && this.room){
                     const oneDay = 24 * 60 * 60 * 1000;
