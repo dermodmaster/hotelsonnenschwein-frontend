@@ -17,7 +17,7 @@
         <v-row v-if="workers.length !==0">
             <v-col v-for="arbeiter in workers" :key="arbeiter.ID_MITARBEITER" cols="3">
                 <v-card>
-                    <v-card-title>{{arbeiter.MITARBEITER_VORNAME + " " + arbeiter.MITARBEITER_NAME}}</v-card-title>
+                    <v-card-title>{{arbeiter.VORNAME + " " + arbeiter.NAME}}</v-card-title>
                     <v-card-subtitle>{{arbeiter.JOB_BEZEICHNUNG}}</v-card-subtitle>
                     <v-card-text>
                         <v-chip v-if="arbeiter.ID_CHEF">Chef: {{arbeiter.CHEF_VORNAME  + " " + arbeiter.CHEF_NAME}}</v-chip>
