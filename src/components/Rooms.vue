@@ -77,13 +77,6 @@
                                         {{j.INVENTAR}}
                                         <v-divider class="mx-4"></v-divider>
 
-                                        <v-card-title>Bestehende Reservierungen</v-card-title>
-
-                                        <v-card-text>
-                                                <v-chip class="accent mr-2">5:30Uhr - 7:30Uhr</v-chip>
-                                                <v-chip class="accent mr-2">16:30Uhr - 17:30Uhr</v-chip>
-                                        </v-card-text>
-
                                         <v-card-actions>
                                             <router-link
                                                     :to="'/booking/'+j.RAUMNUMMER"
@@ -97,7 +90,6 @@
                                             </v-btn>
                                             </router-link>
                                             <v-spacer></v-spacer>
-                                            <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
                                     </v-card>
                                 </v-row>
@@ -130,13 +122,6 @@
                                         {{j.INVENTAR}}
                                         <v-divider class="mx-4"></v-divider>
 
-                                        <v-card-title>Bestehende Reservierungen</v-card-title>
-
-                                        <v-card-text>
-                                                <v-chip class="accent mr-2">5:30Uhr - 7:30Uhr</v-chip>
-                                                <v-chip class="accent mr-2">16:30Uhr - 17:30Uhr</v-chip>
-                                        </v-card-text>
-
                                         <v-card-actions>
                                             <router-link
                                                     :to="'/booking/'+j.RAUMNUMMER"
@@ -150,7 +135,6 @@
                                                 </v-btn>
                                             </router-link>
                                             <v-spacer></v-spacer>
-                                            <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
                                     </v-card>
                                 </v-row>
@@ -187,7 +171,6 @@
 
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
-                                            <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
                                     </v-card>
                                 </v-row>
@@ -224,7 +207,6 @@
 
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
-                                            <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
                                         </v-card-actions>
                                     </v-card>
                                 </v-row>

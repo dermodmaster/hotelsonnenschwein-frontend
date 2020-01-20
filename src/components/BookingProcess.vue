@@ -63,12 +63,7 @@
                             </div>
                         </div>
                         <v-divider class="mx-4"></v-divider>
-
-
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-chip color="success"><v-icon>mdi-check</v-icon>Aktuell Frei</v-chip>
-                        </v-card-actions></div>
+                    </div>
                     </v-card>
             </v-col>
             <v-col>
@@ -78,25 +73,63 @@
                             <v-col style="max-width: 300px">
                                 <div class="ma-3">
                                     <v-text-field v-model="mail" label="E-Mail"></v-text-field>
-                                    <p>Buchungsstart: {{picker}} {{time}}</p>
-                                    <p>Buchungsende: {{picker2}} {{time2}}</p>
+                                    <p>Buchungsstart: {{picker[0]}} {{time}}</p>
+                                    <p>Buchungsende: {{picker[1]}} {{time2}}</p>
                                     <p v-if="room" class="title">Preis: {{price === 0 ? parseFloat(room.CALCPREIS).toFixed(2) : price.toFixed(2)}}€/{{price === 0 ? (room.RAUMTYP === 'zimmer' ? 'Nacht' : 'Stunde') : 'TOTAL'}}</p>
-                                    <v-btn class="mr-4" color="secondary" :disabled="!picker || !time || !picker2 || !time2" @click="submit">Reservieren</v-btn>
+                                    <v-btn class="mr-4" color="secondary" :disabled="!picker || !time || !time2 || !mail" @click="submit">Reservieren</v-btn>
                                 </div>
                             </v-col>
                             <v-col>
                                     <v-row>
                                         <v-col>
+                                            <h3>Buchungszeitraum</h3>
+                                            <v-date-picker @change="calcPrice" v-model="picker" range></v-date-picker>
+                                        </v-col>
+                                        <v-col>
                                             <h3>Buchungsstart</h3>
-                                            <v-date-picker @change="calcPrice" v-model="picker"></v-date-picker>
                                             <v-time-picker @inputx="calcPrice" v-model="time" format="24hr"></v-time-picker>
+                                        </v-col>
+                                        <v-col>
+                                            <h3>Buchungsende</h3>
+                                            <v-time-picker @input="calcPrice" v-model="time2" format="24hr"></v-time-picker>
                                         </v-col>
                                     </v-row>
                                     <v-row>
                                         <v-col>
-                                            <h3>Buchungsende</h3>
-                                            <v-date-picker @change="calcPrice" v-model="picker2"></v-date-picker>
-                                            <v-time-picker @input="calcPrice" v-model="time2" format="24hr"></v-time-picker>
+                                            <v-row>
+                                                <v-col>
+                                                    <h1>Bestehende Reservierungen in der Woche:</h1>
+                                                    <v-btn
+                                                            fab
+                                                            small
+                                                            left
+                                                            color="primary"
+                                                            @click="$refs.calendar.prev()"
+                                                    >
+                                                        <v-icon dark>mdi-chevron-left</v-icon>
+                                                    </v-btn>
+                                                    <v-btn @click="calendarType = (calendarType === 'month' ? 'week' : 'month')">{{calendarType === "month" ? 'Monat':'Woche'}}</v-btn>
+                                                    <v-btn
+                                                            fab
+                                                            small
+                                                            right
+                                                            color="primary"
+                                                            @click="$refs.calendar.next()"
+                                                    >
+                                                        <v-icon dark>mdi-chevron-right</v-icon>
+                                                    </v-btn>
+
+                                                </v-col>
+                                            </v-row>
+                                            <v-sheet>
+                                                <v-calendar
+                                                        ref="calendar"
+                                                        v-model="start"
+                                                        :events="events"
+                                                        color="primary"
+                                                        :type="calendarType"
+                                                ></v-calendar>
+                                            </v-sheet>
                                         </v-col>
                                     </v-row>
                             </v-col>
@@ -118,19 +151,24 @@
             return {
                 room: null,
                 roomtypes: null,
+                bookings: null,
+                events: [],
                 loading: false,
                 translate: {"festsaal":"Festsaal", "tagungsraum":"Tagungsraum", "fitnessstudio":"Fitnessstudio", "schwimmbad":"Schwimmbad"},
                 titles: {tagungsraum: "Tagungsraum"},
                 images: {tagungsraum: "tagungsraum.jpg"},
                 mail: "",
-                picker: null,
-                picker2: null,
-                time:null,
-                time2:null,
-                price: 0
+                picker: [],
+                calendarType: "month",
+                time:"00:00",
+                time2:"00:00",
+                price: 0,
+                start: '2019-01-12'
             }
         },
         mounted() {
+            const now = new Date();
+            this.start = now.toISOString().split('T')[0];
             this.loading = true;
             axios
                 .get('http://hssapi.y4gn1.de/rooms')
@@ -139,19 +177,27 @@
                     axios
                         .get('http://hssapi.y4gn1.de/roomtypes')
                         .then(response => {
-                            this.loading = false;
                             this.roomtypes = response.data;
+                            axios
+                                .get('http://hssapi.y4gn1.de/rooms/'+this.$route.params.id+'/times')
+                                .then(response => {
+                                    this.loading = false;
+                                    this.bookings = response.data;
+                                    this.bookings.map(v=>{
+                                        this.events.push({"name":"Reserviert","start":v.BUCHUNG_START, "end":v.BUCHUNG_ENDE});
+                                    })
+                                })
                         })
                 })
 
         },
         methods: {
             calcPrice(){
-                if(this.picker && this.time && this.picker2 && this.time2 && this.room){
+                if(this.picker && this.time && this.time2 && this.room){
                     const oneDay = 24 * 60 * 60 * 1000;
                     const oneHour = 60 * 60 * 1000;
-                    const start = new Date(this.picker+"T"+this.time);
-                    const end = new Date(this.picker2+"T"+this.time2);
+                    const start = new Date(this.picker[0]+"T"+this.time);
+                    const end = new Date(this.picker[1]+"T"+this.time2);
                     const diffDays = Math.round((end - start) / oneDay);
                     const diffHours = Math.round((end - start) / oneHour);
                     window.console.log(diffDays);
@@ -162,6 +208,9 @@
                     }else{
                         window.console.log("Kein Zimmer");
                         this.price = this.room.CALCPREIS * (diffHours+1); //+1 weil angebrochene Stunde
+                    }
+                    if(this.price < 0){
+                        this.price = 0;
                     }
                 }else{
                     this.price = 0;

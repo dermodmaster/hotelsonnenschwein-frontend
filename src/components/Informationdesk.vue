@@ -85,7 +85,7 @@
             return {
                 data: [],
                 loading: false,
-                email: "melanie1337@gmail.com",
+                email: null,
                 errtext:null,
                 translate: {"festsaal":"Festsaal", "tagungsraum":"Tagungsraum", "fitnessstudio":"Fitnessstudio", "schwimmbad":"Schwimmbad"},
                 events: {"loading":false, "data":[],headers: [
@@ -144,6 +144,7 @@
         methods:{
             errorHandling(data){
                 this.errtext = null;
+                window.console.log(data);
                 if(data[0] && data[0].Status){
                     switch (parseInt(data[0].Status)) {
                         case 1:
@@ -164,6 +165,8 @@
                 if(!this.email){
                     this.errtext = "Bitte eine E-Mail angeben.";
                     return;
+                }else {
+                    this.errtext = null;
                 }
                 const timeoptions = {weekend: 'long', year:'numeric', month:'long', day:'numeric', hour:'numeric', minute:'numeric'};
                 this.events.loading = true;
@@ -173,44 +176,53 @@
                 axios.get('http://hssapi.y4gn1.de/booked/events/'+this.email)
                     .then(response => {
                         this.events.data = response.data;
-                        this.events.data.map(v => {
-                            v.Start = v.Start.replace(" ", "T");
-                            v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions)+" Uhr";
-                            v.Ende = v.Ende.replace(" ", "T");
-                            v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions)+" Uhr";
-                        })
-                        this.events.loading=false;
+                        if (this.rooms.data[0] && this.rooms.data[0].Status){
+                            this.errorHandling(response.data);
+                        }else {
+                            this.events.data.map(v => {
+                                v.Start = v.Start.replace(" ", "T");
+                                v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions) + " Uhr";
+                                v.Ende = v.Ende.replace(" ", "T");
+                                v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions) + " Uhr";
+                            })
+                            this.events.loading = false;
+                        }
 
-                        this.errorHandling(response.data);
 
                     });
                 axios.get('http://hssapi.y4gn1.de/booked/rooms/'+this.email)
                     .then(response => {
                         this.rooms.data = response.data;
-                        this.rooms.data.map(v => {
-                            v.Preis = parseFloat(v.Preis).toFixed(2)+"€";
-                            v.Raeumlichkeit = this.translate[v.Raeumlichkeit];
-                            v.Start = v.Start.replace(" ", "T");
-                            v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions)+" Uhr";
-                            v.Ende = v.Ende.replace(" ", "T");
-                            v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions)+" Uhr";
-                        })
-                        this.rooms.loading = false;
-                        this.errorHandling(response.data);
+                        if (this.rooms.data[0] && this.rooms.data[0].Status){
+                            this.errorHandling(response.data);
+                        }else{
+                            this.rooms.data.map(v => {
+                                v.Preis = parseFloat(v.Preis).toFixed(2)+"€";
+                                v.Raeumlichkeit = this.translate[v.Raeumlichkeit];
+                                v.Start = v.Start.replace(" ", "T");
+                                v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions)+" Uhr";
+                                v.Ende = v.Ende.replace(" ", "T");
+                                v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions)+" Uhr";
+                            })
+                            this.rooms.loading = false;
+                        }
 
                     });
                 axios.get('http://hssapi.y4gn1.de/booked/zimmer/'+this.email)
                     .then(response => {
                         this.zimmer.data = response.data;
-                        this.zimmer.data.map(v => {
-                            v.Preis = parseFloat(v.Preis).toFixed(2)+"€";
-                            v.Start = v.Start.replace(" ", "T");
-                            v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions)+" Uhr";
-                            v.Ende = v.Ende.replace(" ", "T");
-                            v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions)+" Uhr";
-                        })
-                        this.zimmer.loading = false;
-                        this.errorHandling(response.data);
+                        if (this.rooms.data[0] && this.rooms.data[0].Status){
+                            this.errorHandling(response.data);
+                        }else {
+                            this.zimmer.data.map(v => {
+                                v.Preis = parseFloat(v.Preis).toFixed(2) + "€";
+                                v.Start = v.Start.replace(" ", "T");
+                                v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions) + " Uhr";
+                                v.Ende = v.Ende.replace(" ", "T");
+                                v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions) + " Uhr";
+                            })
+                            this.zimmer.loading = false;
+                        }
                     });
             }
         }

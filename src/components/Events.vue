@@ -96,7 +96,7 @@
             bookEvent(){
                 axios.post('http://hssapi.y4gn1.de/events', {
                     email: this.mail,
-                    id: this.selectedEvent.ID,
+                    event_id: this.selectedEvent.ID_EVENT,
                     count: this.personen
                 })
                     .then(response => {
