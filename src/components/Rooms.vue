@@ -216,7 +216,7 @@
                                         </v-card-text>
 
                                         <v-divider class="mx-4"></v-divider>
-                                        <span class="subtitle-2">Ausstattung:</span><br>
+                                        <span class="subtitle-2">Besondere Ausstattung:</span><br>
                                         {{j.INVENTAR}}
                                         <v-divider class="mx-4"></v-divider>
 

@@ -27,10 +27,14 @@
                                     <v-chip class="mb-8 pa-5 subtitle-1">
                                         <v-icon size="32px">{{roomtype.BETTEN > 1? 'mdi-bed-king' : 'mdi-bed-single'}}</v-icon><span class="ml-2"><b>{{roomtype.BETTEN}}</b> {{roomtype.BETTEN > 1 ? 'Schlafplätze' : 'Schlafplatz'}}</span>
                                     </v-chip>
-                                    <v-btn color="secondary" block :disabled="true">Jetzt buchen</v-btn>
+                                    <router-link
+                                            :to="'/rooms/'+roomtype.ID_ZIMMERTYP"
+                                            tag="div">
+                                    <v-btn color="secondary" block>Jetzt buchen</v-btn>
+                                    </router-link>
                                 </v-col>
                                 <v-col class="text-center" cols="6">
-                                    <p class="title font-weight-light">Aktuell<br><span class="display-2 font-weight-light">0,00€</span><br>pro Nacht</p>
+                                    <p class="title font-weight-light">Aktuell<br><span class="display-2 font-weight-light">{{parseFloat(roomtype.Mindestpreis).toFixed(2)}}€</span><br>pro Nacht</p>
                                 </v-col>
                             </v-row>
                         </v-col>
@@ -53,7 +57,7 @@
         },
         mounted() {
             axios
-                .get('http://hssapi.y4gn1.de/roomtypes')
+                .get('http://hssapi.y4gn1.de/roomtypes/prices')
                 .then(response => {
                     this.roomtypes = response.data;
                 })

@@ -4,34 +4,67 @@
             <v-card
                     dark
                     class="secondary"
+                    :loading="loading"
                     background-color="deep-purple accent-4">
                 <h1 class="pa-3 display-3 font-weight-thin ">Auskunft</h1>
                 <h3>Um eine Auskunft zu erhalten, geb bitte hier deine E-Mail Adresse ein:</h3>
                 <v-row class="justify-center">
                     <v-col style="max-width: 400px">
-                        <v-form>
-                            <v-text-field class="text-center"></v-text-field>
-                            <v-btn>Daten abfragen</v-btn>
-                        </v-form>
+                        <v-text-field v-model="email" class="text-center"></v-text-field>
+                        <v-btn @click="getData">Daten abfragen</v-btn>
                     </v-col>
                 </v-row>
             </v-card>
         </div>
-        <div class="text-center">
-            <v-card
-                    dark
-                    class="secondary"
-                    background-color="deep-purple accent-4">
-                <h1 class="pa-3 display-3 font-weight-thin ">Gebuchte Events</h1>
-            </v-card>
-        </div>
-        <div class="text-center">
-            <v-card
-                    dark
-                    class="secondary"
-                    background-color="deep-purple accent-4">
-                <h1 class="pa-3 display-3 font-weight-thin ">Gebuchte Räume</h1>
-            </v-card>
+        <v-alert v-if="errtext" type="error">
+            {{errtext}}
+        </v-alert>
+        <div v-if="!errtext">
+            <div class="text-center">
+                <v-card
+                        dark
+                        class="secondary"
+                        :loading="events.loading"
+                        background-color="deep-purple accent-4">
+                    <h1 class="pa-3 display-3 font-weight-thin ">Gebuchte Events</h1>
+                </v-card>
+            </div>
+            <v-data-table
+                    :headers="events.headers"
+                    :items="events.data"
+                    :items-per-page="5"
+                    class="elevation-1"
+            ></v-data-table>
+            <div class="text-center">
+                <v-card
+                        dark
+                        class="secondary"
+                        :loading="rooms.loading"
+                        background-color="deep-purple accent-4">
+                    <h1 class="pa-3 display-3 font-weight-thin ">Reservierte Angebote</h1>
+                </v-card>
+            </div>
+            <v-data-table
+                    :headers="rooms.headers"
+                    :items="rooms.data"
+                    :items-per-page="5"
+                    class="elevation-1"
+            ></v-data-table>
+            <div class="text-center">
+                <v-card
+                        dark
+                        class="secondary"
+                        :loading="zimmer.loading"
+                        background-color="deep-purple accent-4">
+                    <h1 class="pa-3 display-3 font-weight-thin ">Gebuchte Zimmer</h1>
+                </v-card>
+            </div>
+            <v-data-table
+                    :headers="zimmer.headers"
+                    :items="zimmer.data"
+                    :items-per-page="5"
+                    class="elevation-1"
+            ></v-data-table>
         </div>
     </v-content>
 </template>
@@ -43,7 +76,51 @@
         data: () => {
             return {
                 data: [],
-                loading: false
+                loading: false,
+                email: null,
+                errtext:null,
+                events: {"loading":false, "data":[],headers: [
+                        {
+                            text: 'Eventname',
+                            align: 'left',
+                            value: 'Name',
+                        },
+                        {
+                            text: 'Ziel',
+                            value: 'Ziel',
+                        },
+                        { text: 'Event Beginn', value: 'Start' },
+                        { text: 'Event Ende', value: 'Ende' },
+                        { text: 'Personen', value: 'Anzahl' },
+                    ]},
+                rooms: {"loading":false, "data":[],headers: [
+                        {
+                            text: 'Raumnummer',
+                            align: 'left',
+                            value: 'Raumnummer',
+                        },
+                        {
+                            text: 'Zimmertyp',
+                            value: 'Zimmer',
+                        },
+                        { text: 'Buchungs Beginn', value: 'Start' },
+                        { text: 'Buchungs Ende', value: 'Ende' },
+                        { text: 'Preis pro Nacht (€)', value: 'Preis_Nacht' },
+                    ]},
+                zimmer: {"loading":false, "data":[],headers: [
+                        {
+                            text: 'Raumnummer',
+                            align: 'left',
+                            value: 'Raumnummer',
+                        },
+                        {
+                            text: 'Zimmertyp',
+                            value: 'Zimmer',
+                        },
+                        { text: 'Buchungs Beginn', value: 'Start' },
+                        { text: 'Buchungs Ende', value: 'Ende' },
+                        { text: 'Preis pro Nacht (€)', value: 'Preis_Nacht' },
+                    ],}
             }
         },
         mounted() {
@@ -54,6 +131,63 @@
                     this.loading = false;
                     this.workers = response.data;
                 })
+        },
+        methods:{
+            errorHandling(data){
+                this.errtext = null;
+                if(data[0] && data[0].Status){
+                    switch (parseInt(data[0].Status)) {
+                        case 1:
+                            this.errtext = "Die E-Mail ist ungültig.";
+                            break;
+                        case 2:
+                            this.errtext = "Die E-Mail ist ungültig.";
+                            break;
+                        case 3:
+                            this.errtext = "Es kann kein Kunde zur E-Mail gefunden werden.";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            },
+            getData(){
+                if(!this.email){
+                    this.errtext = "Bitte eine E-Mail angeben.";
+                    return;
+                }
+
+                this.events.loading = true;
+                this.rooms.loading = true;
+                this.zimmer.loading = true;
+
+                axios.get('http://hssapi.y4gn1.de/booked/events/'+this.email)
+                    .then(response => {
+                        this.events.data = response.data;
+                        this.events.loading=false;
+                        window.console.log(response.data);
+                        this.errorHandling(response.data);
+
+                    });
+                axios.get('http://hssapi.y4gn1.de/booked/rooms/'+this.email)
+                    .then(response => {
+                        this.rooms.data = response.data;
+                        this.rooms.loading = false;
+                        window.console.log(response.data);
+                        this.errorHandling(response.data);
+
+                    });
+                axios.get('http://hssapi.y4gn1.de/booked/zimmer/'+this.email)
+                    .then(response => {
+                        this.zimmer.data = response.data;
+                        this.zimmer.data.map(v => {
+                            v.Preis_Nacht = parseFloat(v.Preis_Nacht).toFixed(2)+"€";
+                        })
+                        this.zimmer.loading = false;
+                        window.console.log(response.data);
+                        this.errorHandling(response.data);
+                    });
+            }
         }
     }
 </script>

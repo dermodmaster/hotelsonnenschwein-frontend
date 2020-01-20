@@ -102,21 +102,23 @@
                     .then(response => {
                         this.success = false;
                         this.errtext = null;
-                        switch (response.data) {
-                            case 0:
-                                this.success = true;
-                                break;
-                            case 1:
-                                this.errtext = "Die Kapazität des Events reicht für die Personenanzahl nicht aus";
-                                break;
-                            case 2:
-                                this.errtext = "Das Format der E-Mail ist ungültig.";
-                                break;
-                            case 3:
-                                this.errtext = "Es kann kein Kunde zur E-Mail gefunden werden.";
-                                break;
-                            default:
-                                break;
+                        if(response.data[0] && response.data[0].Status) {
+                            switch ((parseInt(response.data[0].Status))) {
+                                case 0:
+                                    this.success = true;
+                                    break;
+                                case 1:
+                                    this.errtext = "Die Kapazität des Events reicht für die Personenanzahl nicht aus";
+                                    break;
+                                case 2:
+                                    this.errtext = "Das Format der E-Mail ist ungültig.";
+                                    break;
+                                case 3:
+                                    this.errtext = "Es kann kein Kunde zur E-Mail gefunden werden.";
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     })
                     .catch(function () {
