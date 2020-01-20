@@ -5,7 +5,7 @@
                     dark
                     class="secondary"
                     background-color="deep-purple accent-4">
-                <h1 v-if="roomtypes" class="pa-3 display-3 font-weight-thin ">{{roomtypes.filter(v=>v.ID_ZIMMERTYP === $route.params.roomtype)[0].ZTYP_BESCHREIBUNG}} Reservierung</h1>
+                <h1 v-if="roomtypes" class="pa-3 display-3 font-weight-thin ">{{roomtypes.filter(v=>v.ID_ZIMMERTYP === $route.params.roomtype)[0].BESCHREIBUNG}} Reservierung</h1>
             </v-card>
         </div>
         <v-container>

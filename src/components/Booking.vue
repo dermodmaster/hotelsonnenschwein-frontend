@@ -17,7 +17,7 @@
                         <v-col>
                             <v-row>
                                 <v-col>
-                                    <h1 class="display-3">{{roomtype.ZTYP_BESCHREIBUNG}}</h1>
+                                    <h1 class="display-3">{{roomtype.BESCHREIBUNG}}</h1>
                                     <hr class="my-6">
                                     <p class="title font-weight-regular">{{roomtype.EINRICHTUNG}}</p>
                                 </v-col>

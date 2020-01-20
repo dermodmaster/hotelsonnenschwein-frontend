@@ -44,7 +44,7 @@
                         <v-img v-if="room.BILD" :src="'data:image/png;base64,'+room.BILD"></v-img>
                         <v-img v-if="room.RAUMTYP === 'zimmer' && !room.BILD" :src="'data:image/png;base64,'+roomtypes.filter(v=>v.ID_ZIMMERTYP === room.ID_ZIMMERTYP)[0].BILD"></v-img>
 
-                        <v-card-title>{{!room.ID_ZIMMERTYP ? translate[room.RAUMTYP] : roomtypes.filter(v => v.ID_ZIMMERTYP === room.ID_ZIMMERTYP)[0].ZTYP_BESCHREIBUNG}}</v-card-title>
+                        <v-card-title>{{!room.ID_ZIMMERTYP ? translate[room.RAUMTYP] : roomtypes.filter(v => v.ID_ZIMMERTYP === room.ID_ZIMMERTYP)[0].BESCHREIBUNG}}</v-card-title>
 
                         <v-card-text>
                             <div class="mb-1 subtitle-1 black--text">

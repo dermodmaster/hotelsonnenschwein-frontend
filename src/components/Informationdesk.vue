@@ -20,51 +20,59 @@
             {{errtext}}
         </v-alert>
         <div v-if="!errtext">
-            <div class="text-center">
-                <v-card
-                        dark
-                        class="secondary"
-                        :loading="events.loading"
-                        background-color="deep-purple accent-4">
-                    <h1 class="pa-3 display-3 font-weight-thin ">Gebuchte Events</h1>
-                </v-card>
-            </div>
-            <v-data-table
-                    :headers="events.headers"
-                    :items="events.data"
-                    :items-per-page="5"
-                    class="elevation-1"
-            ></v-data-table>
-            <div class="text-center">
-                <v-card
-                        dark
-                        class="secondary"
-                        :loading="rooms.loading"
-                        background-color="deep-purple accent-4">
-                    <h1 class="pa-3 display-3 font-weight-thin ">Reservierte Angebote</h1>
-                </v-card>
-            </div>
-            <v-data-table
-                    :headers="rooms.headers"
-                    :items="rooms.data"
-                    :items-per-page="5"
-                    class="elevation-1"
-            ></v-data-table>
-            <div class="text-center">
-                <v-card
-                        dark
-                        class="secondary"
-                        :loading="zimmer.loading"
-                        background-color="deep-purple accent-4">
-                    <h1 class="pa-3 display-3 font-weight-thin ">Gebuchte Zimmer</h1>
-                </v-card>
-            </div>
-            <v-data-table
-                    :headers="zimmer.headers"
-                    :items="zimmer.data"
-                    :items-per-page="5"
-                    class="elevation-1"
-            ></v-data-table>
+            <v-row>
+                <v-col>
+                    <div class="text-center">
+                        <v-card
+                                dark
+                                class="secondary"
+                                :loading="events.loading"
+                                background-color="deep-purple accent-4">
+                            <h1 class="pa-3 display-1 font-weight-light ">Gebuchte Events</h1>
+                        </v-card>
+                    </div>
+                    <v-data-table
+                            :headers="events.headers"
+                            :items="events.data"
+                            :items-per-page="5"
+                            class="elevation-1"
+                    ></v-data-table>
+                </v-col>
+                <v-col>
+                    <div class="text-center">
+                        <v-card
+                                dark
+                                class="secondary"
+                                :loading="rooms.loading"
+                                background-color="deep-purple accent-4">
+                            <h1 class="pa-3 display-1 font-weight-light ">Reservierte Angebote</h1>
+                        </v-card>
+                    </div>
+                    <v-data-table
+                            :headers="rooms.headers"
+                            :items="rooms.data"
+                            :items-per-page="5"
+                            class="elevation-1"
+                    ></v-data-table>
+                </v-col>
+                <v-col>
+                    <div class="text-center">
+                        <v-card
+                                dark
+                                class="secondary"
+                                :loading="zimmer.loading"
+                                background-color="deep-purple accent-4">
+                            <h1 class="pa-3 display-1 font-weight-light ">Gebuchte Zimmer</h1>
+                        </v-card>
+                    </div>
+                    <v-data-table
+                            :headers="zimmer.headers"
+                            :items="zimmer.data"
+                            :items-per-page="5"
+                            class="elevation-1"
+                    ></v-data-table>
+                </v-col>
+            </v-row>
         </div>
     </v-content>
 </template>
@@ -77,8 +85,9 @@
             return {
                 data: [],
                 loading: false,
-                email: null,
+                email: "melanie1337@gmail.com",
                 errtext:null,
+                translate: {"festsaal":"Festsaal", "tagungsraum":"Tagungsraum", "fitnessstudio":"Fitnessstudio", "schwimmbad":"Schwimmbad"},
                 events: {"loading":false, "data":[],headers: [
                         {
                             text: 'Eventname',
@@ -101,11 +110,11 @@
                         },
                         {
                             text: 'Zimmertyp',
-                            value: 'Zimmer',
+                            value: 'Raeumlichkeit',
                         },
                         { text: 'Buchungs Beginn', value: 'Start' },
                         { text: 'Buchungs Ende', value: 'Ende' },
-                        { text: 'Preis pro Nacht (€)', value: 'Preis_Nacht' },
+                        { text: 'Preis (€)', value: 'Preis' },
                     ]},
                 zimmer: {"loading":false, "data":[],headers: [
                         {
@@ -119,7 +128,7 @@
                         },
                         { text: 'Buchungs Beginn', value: 'Start' },
                         { text: 'Buchungs Ende', value: 'Ende' },
-                        { text: 'Preis pro Nacht (€)', value: 'Preis_Nacht' },
+                        { text: 'Preis (€)', value: 'Preis' },
                     ],}
             }
         },
@@ -156,7 +165,7 @@
                     this.errtext = "Bitte eine E-Mail angeben.";
                     return;
                 }
-
+                const timeoptions = {weekend: 'long', year:'numeric', month:'long', day:'numeric', hour:'numeric', minute:'numeric'};
                 this.events.loading = true;
                 this.rooms.loading = true;
                 this.zimmer.loading = true;
@@ -164,16 +173,29 @@
                 axios.get('http://hssapi.y4gn1.de/booked/events/'+this.email)
                     .then(response => {
                         this.events.data = response.data;
+                        this.events.data.map(v => {
+                            v.Start = v.Start.replace(" ", "T");
+                            v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions)+" Uhr";
+                            v.Ende = v.Ende.replace(" ", "T");
+                            v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions)+" Uhr";
+                        })
                         this.events.loading=false;
-                        window.console.log(response.data);
+
                         this.errorHandling(response.data);
 
                     });
                 axios.get('http://hssapi.y4gn1.de/booked/rooms/'+this.email)
                     .then(response => {
                         this.rooms.data = response.data;
+                        this.rooms.data.map(v => {
+                            v.Preis = parseFloat(v.Preis).toFixed(2)+"€";
+                            v.Raeumlichkeit = this.translate[v.Raeumlichkeit];
+                            v.Start = v.Start.replace(" ", "T");
+                            v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions)+" Uhr";
+                            v.Ende = v.Ende.replace(" ", "T");
+                            v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions)+" Uhr";
+                        })
                         this.rooms.loading = false;
-                        window.console.log(response.data);
                         this.errorHandling(response.data);
 
                     });
@@ -181,10 +203,13 @@
                     .then(response => {
                         this.zimmer.data = response.data;
                         this.zimmer.data.map(v => {
-                            v.Preis_Nacht = parseFloat(v.Preis_Nacht).toFixed(2)+"€";
+                            v.Preis = parseFloat(v.Preis).toFixed(2)+"€";
+                            v.Start = v.Start.replace(" ", "T");
+                            v.Start = new Date(v.Start).toLocaleDateString('de-DE', timeoptions)+" Uhr";
+                            v.Ende = v.Ende.replace(" ", "T");
+                            v.Ende = new Date(v.Ende).toLocaleDateString('de-DE', timeoptions)+" Uhr";
                         })
                         this.zimmer.loading = false;
-                        window.console.log(response.data);
                         this.errorHandling(response.data);
                     });
             }
